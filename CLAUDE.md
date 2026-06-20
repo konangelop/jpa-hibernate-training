@@ -27,9 +27,16 @@ in `src/test/.../manytoone_onetomany/` include the N+1 bad/good pair (measured v
 count to isolate it from the inverse-OneToOne eager noise), plus tutorial chapter `docs/04`. All 13
 tests green.
 
+**Pass 4 complete (ManyToMany).** Pure bidirectional `Product`↔`Tag` (`Set` + `@JoinTable
+product_tag`, owning = `Product`), unidirectional `Customer`→wishlist `Set<Product>` (`@JoinTable
+customer_wishlist`), and the join-entity view of `Order`↔`Product` through `OrderItem` (link
+attributes + N+1-on-the-far-side fixed by `JOIN FETCH`). New entity `catalog/Tag` (+repo); `Product`
+gains `tags`, `Customer` gains `wishlist`. Tests in `src/test/.../manytomany/`, tutorial chapter
+`docs/05`. All 19 tests green.
+
 The full design (the ~12-entity domain model, the common-problems catalog, the chapter list) lives
 in `~/.claude/plans/shiny-watching-marble.md` — the source of truth for the remaining passes
-(ManyToMany → fetching → problems → docs). The
+(fetching → problems → docs). The
 pass-by-pass breakdown is in `~/.claude/plans/ultraplan-ticklish-yao.md`. Update this file as each
 pass lands real structure.
 

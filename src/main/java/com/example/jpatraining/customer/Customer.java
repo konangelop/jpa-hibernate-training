@@ -1,5 +1,6 @@
 package com.example.jpatraining.customer;
 
+import com.example.jpatraining.catalog.Product;
 import com.example.jpatraining.ordering.Order;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,22 +10,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Customer aggregate root, home of several relationships:
+ * Customer aggregate root. Relationships:
  * <ul>
- *   <li><b>OneToOne to {@link CustomerProfile}</b> — bidirectional, shared PK via {@code @MapsId}
- *       (the profile owns the shared key);</li>
- *   <li><b>OneToMany to {@link Order}</b> — the inverse side of the bidirectional default
- *       ({@code mappedBy = "customer"}; {@code Order} owns the FK);</li>
- *   <li><b>unidirectional OneToMany to {@link Address}</b> — {@code @JoinColumn} puts the FK on the
- *       address table, so there is NO join table.</li>
+ *   <li>OneToOne to {@link CustomerProfile} — bidirectional, shared PK via {@code @MapsId};</li>
+ *   <li>OneToMany to {@link Order} — inverse of the bidirectional default ({@code mappedBy});</li>
+ *   <li>unidirectional OneToMany to {@link Address} — {@code @JoinColumn}, no join table;</li>
+ *   <li><b>unidirectional ManyToMany to {@link Product}</b> (wishlist) — {@code @JoinTable
+ *       customer_wishlist}; Product has no back-reference.</li>
  * </ul>
  */
 @Entity
@@ -49,6 +53,13 @@ public class Customer {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "customer_id") // unidirectional: FK on the address table, NO join table
     private List<Address> addresses = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "customer_wishlist",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> wishlist = new HashSet<>();
 
     protected Customer() {
     }
@@ -105,5 +116,17 @@ public class Customer {
 
     public void addAddress(Address address) {
         addresses.add(address);
+    }
+
+    public Set<Product> getWishlist() {
+        return wishlist;
+    }
+
+    public void addToWishlist(Product product) {
+        wishlist.add(product);
+    }
+
+    public void removeFromWishlist(Product product) {
+        wishlist.remove(product);
     }
 }
