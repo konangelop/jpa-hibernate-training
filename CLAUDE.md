@@ -40,9 +40,17 @@ parent-child with cascade+orphanRemoval, `Review`→`Customer` ManyToOne). `Prod
 `src/test/.../fetching/` compare `JOIN FETCH`, `@EntityGraph`, `@BatchSize`, and two-step pagination
 (avoiding the HHH000104 in-memory-paging trap), tutorial chapter `docs/06`. All 23 tests green.
 
+**Pass 6 complete (common-problems catalog).** Twelve bad/good problem tests in
+`src/test/.../problems/` (with test-only anti-pattern entities for the EAGER and equals/hashCode
+demos): `LazyInitializationException`, `MultipleBagFetchException`, cartesian product, EAGER pitfall,
+wrong owning side, equals/hashCode in a `Set`, missing-cascade transient error, DTO projection, and
+batch inserts — plus N+1, orphanRemoval, OSIV and pagination cross-linked from earlier chapters.
+Tutorial chapter `docs/07`. All 35 tests green. (Hibernate-7 reality baked into the cartesian note:
+fetch-join roots are auto-deduplicated, so that classic duplicate-rows bug is now only a perf cost.)
+
 The full design (the ~12-entity domain model, the common-problems catalog, the chapter list) lives
 in `~/.claude/plans/shiny-watching-marble.md` — the source of truth for the remaining passes
-(fetching → problems → docs). The
+(docs polish — getting-started, fundamentals, cheatsheet, README, DataSeeder). The
 pass-by-pass breakdown is in `~/.claude/plans/ultraplan-ticklish-yao.md`. Update this file as each
 pass lands real structure.
 
