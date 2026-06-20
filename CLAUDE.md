@@ -10,11 +10,17 @@ end-to-end against the real stack. What exists today: `pom.xml`, `src/main/resou
 `AbstractIntegrationTest` (Testcontainers Postgres via `@ServiceConnection`, intentionally **not**
 `@Transactional`), `SqlCounter` (Hibernate `Statistics` query-counter), `TestDataFactory`, and a
 `HarnessSmokeTest` that **passes** (it boots the context against a real Postgres 17 container and
-asserts the counter sees exactly one SQL statement). **No domain entities exist yet.**
+asserts the counter sees exactly one SQL statement).
+
+**Pass 2 complete (embeddable + OneToOne).** The `Money` `@Embeddable` plus the OneToOne home —
+`Order`→`Shipment` (unidirectional FK), `Order`↔`Payment` (bidirectional, owning = `Payment`),
+`Customer`↔`CustomerProfile` (`@MapsId` shared PK) — with Spring Data repos, query-count tests
+(`src/test/.../embeddables/`, `src/test/.../onetoone/`), and tutorial chapters `docs/02`, `docs/03`.
+All six tests green. Entities use `SEQUENCE` id generation and all-LAZY associations.
 
 The full design (the ~12-entity domain model, the common-problems catalog, the chapter list) lives
 in `~/.claude/plans/shiny-watching-marble.md` — the source of truth for the remaining passes
-(embeddable/OneToOne → ManyToOne/OneToMany → ManyToMany → fetching → problems → docs). The
+(ManyToOne/OneToMany → ManyToMany → fetching → problems → docs). The
 pass-by-pass breakdown is in `~/.claude/plans/ultraplan-ticklish-yao.md`. Update this file as each
 pass lands real structure.
 
