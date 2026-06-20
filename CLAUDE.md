@@ -18,9 +18,18 @@ asserts the counter sees exactly one SQL statement).
 (`src/test/.../embeddables/`, `src/test/.../onetoone/`), and tutorial chapters `docs/02`, `docs/03`.
 All six tests green. Entities use `SEQUENCE` id generation and all-LAZY associations.
 
+**Pass 3 complete (ManyToOne/OneToMany).** `Product`→`Brand` (ManyToOne), self-referential
+`Category` tree, `Customer`↔`Order` (bidirectional default, owning = `Order.customer`),
+`Order`↔`OrderItem` (cascade + orphanRemoval), `Customer`→`Address` (unidirectional `@JoinColumn`,
+no join table). New entities `catalog/{Brand,Category,Product}`, `customer/Address`,
+`ordering/OrderItem`; `Money` now also embedded in `Product.price` and `OrderItem.unitPrice`. Tests
+in `src/test/.../manytoone_onetomany/` include the N+1 bad/good pair (measured via collection-load
+count to isolate it from the inverse-OneToOne eager noise), plus tutorial chapter `docs/04`. All 13
+tests green.
+
 The full design (the ~12-entity domain model, the common-problems catalog, the chapter list) lives
 in `~/.claude/plans/shiny-watching-marble.md` — the source of truth for the remaining passes
-(ManyToOne/OneToMany → ManyToMany → fetching → problems → docs). The
+(ManyToMany → fetching → problems → docs). The
 pass-by-pass breakdown is in `~/.claude/plans/ultraplan-ticklish-yao.md`. Update this file as each
 pass lands real structure.
 

@@ -49,6 +49,14 @@ public class SqlCounter {
         return statistics.getEntityInsertCount();
     }
 
+    public long updateCount() {
+        return statistics.getEntityUpdateCount();
+    }
+
+    public long deleteCount() {
+        return statistics.getEntityDeleteCount();
+    }
+
     /**
      * Assert the number of SQL statements issued since {@link #reset()}. In a read-only measured
      * block this equals the SELECT count — what turns "N+1" into a concrete pass/fail number.
