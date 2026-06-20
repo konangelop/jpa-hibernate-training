@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jpatraining
+    username: jpa
+    password: jpa
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop          # learning project: fresh schema each boot/suite
+    properties:
+      "[hibernate.format_sql]": true
+      "[hibernate.generate_statistics]": true
+      "[hibernate.jdbc.batch_size]": 20
+      "[hibernate.order_inserts]": true
+      "[hibernate.order_updates]": true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE

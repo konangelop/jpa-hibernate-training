@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: jpa-training-postgres
+    environment:
+      POSTGRES_DB: jpatraining
+      POSTGRES_USER: jpa
+      POSTGRES_PASSWORD: jpa
+    ports:
+      - "5432:5432"
+    volumes:
+      - jpa-training-pgdata:/var/lib/postgresql/data
+
+volumes:
+  jpa-training-pgdata:

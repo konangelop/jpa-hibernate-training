@@ -40,3 +40,8 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Local-only Maven JVM args: trust the Windows cert store so builds work behind this
+# machine's Norton "Web/Mail Shield" TLS scanning. Windows-specific (WINDOWS-ROOT), so it
+# must NOT be committed — it would break Linux/CI where that truststore type doesn't exist.
+.mvn/jvm.config
