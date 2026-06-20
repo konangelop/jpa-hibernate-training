@@ -93,9 +93,12 @@ Two **local-only, uncommitted** workarounds make `mvn` and `./mvnw` work:
   JVM trusts the Windows cert store (which holds Norton's root). Recreate it if it goes missing.
 - The wrapper's Maven distribution is pre-seeded at `~/.m2/wrapper/dists/apache-maven-3.9.11/<hash>`
   (copied from the local Maven install) so `./mvnw` never runs its curl bootstrap download.
+- **git** push/fetch over HTTPS otherwise fails with OpenSSL `unable to get local issuer
+  certificate`; this repo sets `http.sslBackend=schannel` (repo-local `.git/config`, not committed)
+  so git also uses the Windows cert store. No verification is disabled.
 
-On a machine without TLS-scanning AV, none of this is needed — delete `.mvn/jvm.config` and the
-wrapper downloads normally.
+On a machine without TLS-scanning AV, none of this is needed — delete `.mvn/jvm.config`, unset the
+git `sslBackend`, and downloads/pushes work normally.
 
 ## Architecture & conventions
 
