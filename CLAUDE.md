@@ -34,6 +34,12 @@ attributes + N+1-on-the-far-side fixed by `JOIN FETCH`). New entity `catalog/Tag
 gains `tags`, `Customer` gains `wishlist`. Tests in `src/test/.../manytomany/`, tutorial chapter
 `docs/05`. All 19 tests green.
 
+**Pass 5 complete (fetching strategies).** New `catalog/Review` (`Product`↔`Review` OneToMany
+parent-child with cascade+orphanRemoval, `Review`→`Customer` ManyToOne). `Product.reviews` carries
+`@BatchSize(10)`; `ProductRepository.findByIdIn` uses `@EntityGraph`. Tests in
+`src/test/.../fetching/` compare `JOIN FETCH`, `@EntityGraph`, `@BatchSize`, and two-step pagination
+(avoiding the HHH000104 in-memory-paging trap), tutorial chapter `docs/06`. All 23 tests green.
+
 The full design (the ~12-entity domain model, the common-problems catalog, the chapter list) lives
 in `~/.claude/plans/shiny-watching-marble.md` — the source of truth for the remaining passes
 (fetching → problems → docs). The
