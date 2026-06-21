@@ -38,6 +38,10 @@ it.
 - **`equals`/`hashCode`**: value objects by value; entities by a stable business key (never the
   generated id), or rely on identity within a session.
 - **Batch settings on**: `hibernate.jdbc.batch_size`, `order_inserts`, `order_updates`.
+- **Optimistic locking** with `@Version` on entities edited concurrently — a stale write fails loudly
+  instead of silently losing data.
+- **Map enums with `@Enumerated(EnumType.STRING)`** — never `ORDINAL` (the stored position breaks if
+  constants are reordered).
 
 ## Smells → fixes (see [07](07-common-problems.md))
 
@@ -50,6 +54,8 @@ it.
 | Update "lost" | mutated the inverse side only | set the owning side (helper method) |
 | `Set` membership breaks after save | `hashCode` uses the generated id | use a business key |
 | `HHH000104`, wrong page size | collection `JOIN FETCH` + `setMaxResults` | page ids first, then fetch |
+| Silent lost update under concurrency | no `@Version` | add `@Version` (optimistic locking) |
+| Enum data wrong after reordering constants | `@Enumerated(ORDINAL)` | use `@Enumerated(STRING)` |
 
 ## Back to the start
 

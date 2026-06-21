@@ -4,15 +4,18 @@ import com.example.jpatraining.customer.Customer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,8 @@ import java.util.List;
  *   <li><b>unidirectional OneToOne to {@link Shipment}</b> (FK on orders);</li>
  *   <li><b>inverse OneToOne to {@link Payment}</b> ({@code mappedBy}; Payment owns the FK).</li>
  * </ul>
+ * It also carries an {@code @Enumerated(STRING)} {@link OrderStatus} and an {@code @Version} field
+ * for optimistic locking (see the common-problems chapter).
  */
 @Entity
 @Table(name = "orders") // "order" is a SQL reserved word
@@ -38,6 +43,13 @@ public class Order {
 
     @Column(nullable = false, unique = true)
     private String orderNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status = OrderStatus.NEW;
+
+    @Version
+    private long version;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
@@ -66,6 +78,19 @@ public class Order {
 
     public String getOrderNumber() {
         return orderNumber;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    /** Optimistic-lock version, managed by Hibernate (incremented on each update). */
+    public long getVersion() {
+        return version;
     }
 
     public Customer getCustomer() {

@@ -65,6 +65,12 @@ Tests extend [`AbstractIntegrationTest`](../src/test/java/com/example/jpatrainin
 (real Postgres via Testcontainers `@ServiceConnection`; deliberately **not** `@Transactional`) and
 drive transactions explicitly via a `TransactionTemplate`.
 
+## Field-level mappings worth knowing
+
+Beyond relationships, two field mappings appear in the problems chapter: **`@Version`** (optimistic
+locking — concurrent lost updates fail loudly instead of silently) and **`@Enumerated(EnumType.STRING)`**
+(persist enums by name, never by `ORDINAL` position). See [chapter 07](07-common-problems.md) #15–#16.
+
 ## Next
 
 [02 — Embeddables & value objects](02-embeddables-and-value-objects.md).

@@ -19,6 +19,8 @@ demonstrated in earlier chapters are cross-linked rather than repeated.
 | 12 | DTO / projection | [`DtoProjectionProblemTest`](../src/test/java/com/example/jpatraining/problems/DtoProjectionProblemTest.java) |
 | 13 | Pagination + `JOIN FETCH` | [ch.06 `FetchingStrategiesTest`](../src/test/java/com/example/jpatraining/fetching/FetchingStrategiesTest.java) |
 | 14 | Batch inserts | [`BatchInsertProblemTest`](../src/test/java/com/example/jpatraining/problems/BatchInsertProblemTest.java) |
+| 15 | Optimistic locking (lost update) | [`OptimisticLockingProblemTest`](../src/test/java/com/example/jpatraining/problems/OptimisticLockingProblemTest.java) |
+| 16 | `@Enumerated(ORDINAL)` fragility | [`EnumMappingProblemTest`](../src/test/java/com/example/jpatraining/problems/EnumMappingProblemTest.java) |
 
 ---
 
@@ -79,7 +81,8 @@ it **false** (`application.yml`) so missing fetches fail fast in tests and you f
 ### 12 · DTO / projection (over-fetching)
 Loading whole entities when a screen needs a few fields wastes work and invites N+1. A constructor
 projection (`select new ...Summary(p.name, p.price.amount)`) is a single query over just those columns.
-Proven: one statement, no entities. Interface-based projections (Spring Data) do the same declaratively.
+Proven: one statement, no entities. Interface-based projections (Spring Data) do the same
+declaratively — also proven here (`interfaceProjection_isASingleNarrowedQuery`).
 
 ### 13 · Pagination + JOIN FETCH (HHH000104)
 A collection `JOIN FETCH` with `setMaxResults` paginates **in memory** (warning `HHH000104`). **Fix:**
@@ -89,6 +92,19 @@ page parent ids first, then fetch that page with its collection (or use `@BatchS
 With `hibernate.jdbc.batch_size` + `order_inserts` (and SEQUENCE ids), many same-type inserts share one
 batched statement. Proven: 20 inserts collapse to a handful of statements. IDENTITY ids would disable
 batching (a round trip per row).
+
+### 15 · Optimistic locking (lost update)
+Two transactions read the same row; without protection the later commit silently overwrites the
+earlier one (a "lost update"). An `@Version` column turns that into a loud failure. Proven: a stale
+copy (version 0) re-saved after another transaction bumped the row to version 1 fails with an
+optimistic-lock exception; a fresh load-modify-commit succeeds and increments the version. **Fix:**
+add `@Version` to entities that can be edited concurrently.
+
+### 16 · @Enumerated(ORDINAL) fragility
+`@Enumerated(EnumType.ORDINAL)` stores an enum by its **position** (`PAID` → `1`). Reordering or
+inserting constants then silently remaps every existing row. Proven via native SQL: the ORDINAL column
+holds `1` while the STRING column holds `'PAID'`. **Fix:** always map enums with
+`@Enumerated(EnumType.STRING)`.
 
 ## Next
 

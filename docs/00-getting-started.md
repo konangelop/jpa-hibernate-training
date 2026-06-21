@@ -52,6 +52,13 @@ src/test/.../{onetoone,manytoone_onetomany,manytomany,fetching,problems}/   the 
 
 There is intentionally **no REST/controller layer** — the focus is JPA, exercised through tests.
 
+## Intentionally out of scope
+
+To stay focused on relationships, fetching, and their pitfalls, this project does **not** cover:
+inheritance mapping (`@Inheritance`, `@MappedSuperclass`), composite keys (`@EmbeddedId`/`@IdClass`),
+full auditing (`@CreatedDate`/`@LastModifiedDate`), the second-level cache, multi-tenancy, and schema
+migrations (it uses `ddl-auto` for learning). They're natural follow-ups, not core to the lessons here.
+
 ## The tutorial
 
 1. [01 — JPA fundamentals](01-jpa-fundamentals.md) — entities, the persistence context, lazy vs eager, and how the SQL-counting harness works

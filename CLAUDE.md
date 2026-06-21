@@ -61,6 +61,12 @@ written and cross-linked. The full design lives in `~/.claude/plans/shiny-watchi
 pass-by-pass breakdown in `~/.claude/plans/ultraplan-ticklish-yao.md`. Keep this file in sync as the
 model evolves.
 
+**Pass 8 — review-driven enrichments.** Added optimistic locking (`@Version` on `Order`),
+`@Enumerated(STRING)` via the `OrderStatus` enum (plus the `ORDINAL` pitfall as a test-only entity),
+and a Spring Data interface-based projection (closing a previously-untested doc claim). New problems
+#15 (optimistic locking) and #16 (`@Enumerated` ORDINAL) in `docs/07`; `docs/00` now lists what's
+intentionally out of scope. All 41 tests green.
+
 ## What this project is
 
 A **learning resource**, not a product. It teaches JPA / Hibernate entity relationships and

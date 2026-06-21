@@ -11,6 +11,7 @@ import com.example.jpatraining.customer.Customer;
 import com.example.jpatraining.customer.CustomerProfile;
 import com.example.jpatraining.ordering.Order;
 import com.example.jpatraining.ordering.OrderItem;
+import com.example.jpatraining.ordering.OrderStatus;
 import com.example.jpatraining.ordering.Payment;
 import com.example.jpatraining.ordering.Shipment;
 import jakarta.persistence.EntityManager;
@@ -88,6 +89,7 @@ public class DataSeeder implements CommandLineRunner {
         order.setShipment(shipment);
         order.addItem(new OrderItem(phoneX, 1, phoneX.getPrice()));
         order.addItem(new OrderItem(laptopY, 2, laptopY.getPrice()));
+        order.setStatus(OrderStatus.PAID);
         em.persist(order); // cascades order items
 
         Payment payment = new Payment(order, Money.of("3297.00", "EUR"), "CARD"); // links the order
