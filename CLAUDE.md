@@ -48,11 +48,17 @@ batch inserts — plus N+1, orphanRemoval, OSIV and pagination cross-linked from
 Tutorial chapter `docs/07`. All 35 tests green. (Hibernate-7 reality baked into the cartesian note:
 fetch-join roots are auto-deduplicated, so that classic duplicate-rows bug is now only a perf cost.)
 
-The full design (the ~12-entity domain model, the common-problems catalog, the chapter list) lives
-in `~/.claude/plans/shiny-watching-marble.md` — the source of truth for the remaining passes
-(docs polish — getting-started, fundamentals, cheatsheet, README, DataSeeder). The
-pass-by-pass breakdown is in `~/.claude/plans/ultraplan-ticklish-yao.md`. Update this file as each
-pass lands real structure.
+**Pass 7 complete (docs polish + seeder).** `seed/DataSeeder` (`CommandLineRunner`,
+`@Profile("!test")` — `AbstractIntegrationTest` activates the `test` profile, so the seeder never runs
+in tests) populates a full sample graph for manual runs. Tutorial chapters `docs/00` (getting-started),
+`docs/01` (fundamentals), and `docs/08` (cheatsheet) round out the set; `README.md` carries the chapter
+index. All 35 tests green.
+
+**The project is feature-complete.** Every relationship type, the fetching strategies, and the
+common-problems catalog are implemented, documented, and proven by tests; `docs/00`–`docs/08` are
+written and cross-linked. The full design lives in `~/.claude/plans/shiny-watching-marble.md`; the
+pass-by-pass breakdown in `~/.claude/plans/ultraplan-ticklish-yao.md`. Keep this file in sync as the
+model evolves.
 
 ## What this project is
 

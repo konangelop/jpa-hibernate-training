@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * class, so they share one Spring application context (context cache) and therefore one container.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ActiveProfiles("test") // keeps the @Profile("!test") DataSeeder out of the test context
 @Import(ContainerConfig.class)
 public abstract class AbstractIntegrationTest {
 

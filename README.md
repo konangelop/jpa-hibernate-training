@@ -7,20 +7,28 @@ products, OSIV, pagination-with-fetch, …) — taught through one realistic **e
 Its defining idea: **the tests are the documentation.** Each concept and each pitfall is a JUnit
 integration test written as a *bad/good pair*, and correctness is asserted by **counting the SQL
 Hibernate actually issues** (via Hibernate `Statistics`). So "N+1" is a concrete failing-vs-passing
-number, not prose. A markdown tutorial under `docs/` (added concept-by-concept) is a co-equal
-deliverable.
+number, not prose. The markdown tutorial under [`docs/`](docs/) is a co-equal deliverable — every
+claim links to the test that proves it.
 
-## Status
+## Tutorial
 
-**Foundation complete.** The project is scaffolded and the test harness is proven end-to-end: a
-`HarnessSmokeTest` boots Spring Boot against a real Postgres container (Testcontainers) and verifies
-the Hibernate-backed query-counter. Domain entities, the concept/problem tests, and the tutorial
-chapters are built in subsequent passes (design: `~/.claude/plans/shiny-watching-marble.md`).
+Start at [docs/00 — Getting started](docs/00-getting-started.md), then:
+
+| # | Chapter | Covers |
+|---|---|---|
+| 01 | [JPA fundamentals](docs/01-jpa-fundamentals.md) | entities vs value objects, persistence context, the SQL-counting harness |
+| 02 | [Embeddables & value objects](docs/02-embeddables-and-value-objects.md) | `@Embeddable` `Money` |
+| 03 | [One-to-One](docs/03-one-to-one.md) | unidirectional / bidirectional / `@MapsId`, the inverse-lazy trap |
+| 04 | [Many-to-One & One-to-Many](docs/04-many-to-one-and-one-to-many.md) | the default mapping, self-ref, cascade + orphanRemoval, **N+1** |
+| 05 | [Many-to-Many](docs/05-many-to-many.md) | join entity vs pure `@ManyToMany`, `Set` vs `List` |
+| 06 | [Fetching strategies](docs/06-fetching-strategies.md) | `JOIN FETCH`, `@EntityGraph`, `@BatchSize`, pagination |
+| 07 | [Common problems](docs/07-common-problems.md) | the bad/good catalog |
+| 08 | [Cheat sheet](docs/08-cheatsheet.md) | decision tables + best-practice defaults |
 
 ## Stack
 
 Java 21 · Maven · Spring Boot 4.1 · Hibernate ORM 7 · Jakarta Persistence 3.2 · PostgreSQL.
-Tests run against **Testcontainers** (real Postgres, not H2), so behavior matches the production dialect.
+Tests run against **Testcontainers** (real Postgres, not H2), so behaviour matches the production dialect.
 
 ## Prerequisites
 
@@ -40,7 +48,7 @@ Tests run against **Testcontainers** (real Postgres, not H2), so behavior matche
 # Build
 ./mvnw clean package
 
-# Run the app against the docker-compose Postgres
+# Run the app against the docker-compose Postgres (DataSeeder loads a sample graph)
 docker compose up -d
 ./mvnw spring-boot:run
 ```
