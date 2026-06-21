@@ -52,7 +52,8 @@ fetch-join roots are auto-deduplicated, so that classic duplicate-rows bug is no
 `@Profile("!test")` — `AbstractIntegrationTest` activates the `test` profile, so the seeder never runs
 in tests) populates a full sample graph for manual runs. Tutorial chapters `docs/00` (getting-started),
 `docs/01` (fundamentals), and `docs/08` (cheatsheet) round out the set; `README.md` carries the chapter
-index. All 35 tests green.
+index. `Product.imageUrls` (`@ElementCollection`, documented in chapter 02) completes the concept
+list. All 36 tests green.
 
 **The project is feature-complete.** Every relationship type, the fetching strategies, and the
 common-problems catalog are implemented, documented, and proven by tests; `docs/00`–`docs/08` are

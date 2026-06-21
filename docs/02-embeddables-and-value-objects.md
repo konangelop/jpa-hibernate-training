@@ -63,6 +63,32 @@ create table payment (
   owner row; there is no join and no second query, because there is no separate table;
 - the value **round-trips by value**: `payment.getAmount()` equals `Money.of("99.90", "EUR")`.
 
+## Related: `@ElementCollection` (a collection of values)
+
+> Proven by [`ElementCollectionTest`](../src/test/java/com/example/jpatraining/embeddables/ElementCollectionTest.java).
+
+When an entity owns a *collection* of basic (or embeddable) values — not entities — use
+`@ElementCollection`. The values live in their own table with a FK back to the owner; they have no
+identity of their own. `Product.imageUrls` is the example:
+
+```java
+@ElementCollection                                   // lazy by default
+@CollectionTable(name = "product_image", joinColumns = @JoinColumn(name = "product_id"))
+@Column(name = "url")
+private Set<String> imageUrls = new HashSet<>();
+```
+
+```sql
+create table product_image (
+    product_id bigint not null,   -- FK to product
+    url varchar(255)
+)
+```
+
+`imageUrls_areLazyAndLoadInOneSelect` confirms the collection is lazy (the product loads in one
+select) and that the values come back with a single select from `product_image`. Reach for an
+entity + `@OneToMany` instead only when the elements need their own identity or lifecycle.
+
 ## Best practices (what this project upholds)
 
 - **Equality by value.** Implement `equals`/`hashCode` over *all* fields. This is the opposite of

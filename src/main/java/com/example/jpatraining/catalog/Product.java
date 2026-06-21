@@ -2,6 +2,9 @@ package com.example.jpatraining.catalog;
 
 import com.example.jpatraining.common.Money;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +29,8 @@ import java.util.Set;
  *   <li>unidirectional ManyToOne to {@link Brand} (FK {@code brand_id});</li>
  *   <li>ManyToOne to {@link Category} (bidirectional — {@code Category.products} is the inverse);</li>
  *   <li>pure bidirectional ManyToMany to {@link Tag} — owning side ({@code @JoinTable product_tag});</li>
- *   <li>OneToMany to {@link Review} — parent–child, carries {@code @BatchSize} for the fetching chapter.</li>
+ *   <li>OneToMany to {@link Review} — parent–child, carries {@code @BatchSize} for the fetching chapter;</li>
+ *   <li>an {@code @ElementCollection} of {@code imageUrls} — a collection of basic values in its own table.</li>
  * </ul>
  * Reuses the {@link Money} embeddable for {@code price}; uses a {@code Set} for the ManyToMany.
  */
@@ -60,6 +64,11 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @BatchSize(size = 10) // batch-fetch lazy review collections across products (see chapter 06)
     private List<Review> reviews = new ArrayList<>();
+
+    @ElementCollection // collection of basic values -> its own table, lazy by default
+    @CollectionTable(name = "product_image", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "url")
+    private Set<String> imageUrls = new HashSet<>();
 
     protected Product() {
     }
@@ -113,5 +122,13 @@ public class Product {
     public void addReview(Review review) {
         reviews.add(review);
         review.setProduct(this);
+    }
+
+    public Set<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void addImageUrl(String url) {
+        imageUrls.add(url);
     }
 }

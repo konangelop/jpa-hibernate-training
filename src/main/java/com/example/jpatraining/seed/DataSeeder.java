@@ -70,6 +70,8 @@ public class DataSeeder implements CommandLineRunner {
         Product phoneX = new Product("Phone X", Money.of("699.00", "EUR"), acme, phones);
         phoneX.addTag(fresh);
         phoneX.addTag(popular);
+        phoneX.addImageUrl("https://img.example/phone-x-front.png");
+        phoneX.addImageUrl("https://img.example/phone-x-back.png");
         phoneX.addReview(new Review(alice, 5, "Excellent phone"));
         Product laptopY = new Product("Laptop Y", Money.of("1299.00", "EUR"), globex, laptops);
         laptopY.addTag(popular);
